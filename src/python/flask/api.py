@@ -11,7 +11,9 @@ from flask import Flask, jsonify, redirect, request, render_template
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
 
-pass
+app.route('/', methods=['GET'])
+def get_home():
+    return 'Hello world!'
 
 
 if __name__ == "__main__":
