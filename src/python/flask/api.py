@@ -17,4 +17,4 @@ def get_home():
 
 
 if __name__ == "__main__":
-    app.run(app.config["IP"], app.config["PORT"])
+    app.run(FLASK_IP, FLASK_PORT)
