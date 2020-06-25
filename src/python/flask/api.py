@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # api.py
 
+import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import os
 from config import FLASK_IP, FLASK_PORT
 from flask import Flask, jsonify, redirect, request, render_template
 
