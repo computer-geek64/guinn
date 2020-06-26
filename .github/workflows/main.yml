@@ -1,0 +1,19 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Git Pull
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ develop, master, stable, hotfix ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deployment
+    - name: Git Pull
+        uses: fjogeleit/http-request-action@v1.3.1
+        with:
+          url: http://guinn.pythonanywhere.com/git/pull/?token=${{secrets.DEBUG_TOKEN}}
+          method: 'GET'
