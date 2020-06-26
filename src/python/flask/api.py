@@ -16,7 +16,7 @@ app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspa
 def get_home():
     return 'Hello world!', 200
 
-@app.route('/git/pull', methods=['GET'])
+@app.route('/git/pull/', methods=['GET'])
 def get_git_pull():
     if request.args.get('token') == DEBUG_TOKEN:
         git.cmd.Git(os.path.dirname(os.path.abspath(__file__))).pull()
