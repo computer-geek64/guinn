@@ -4,7 +4,8 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import FLASK_IP, FLASK_PORT
+import git
+from config import FLASK_IP, FLASK_PORT, DEBUG_TOKEN
 from flask import Flask, jsonify, redirect, request, render_template
 
 
@@ -13,7 +14,12 @@ app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspa
 
 @app.route('/', methods=['GET'])
 def get_home():
-    return 'Hello world!'
+    return 'Hello world!', 200
+
+@app.route('/git/pull', methods=['GET'])
+def get_git_pull():
+    git.cmd.Git(os.path.dirname(os.path.abspath(__file__))).pull()
+    return 'Pulling', 200
 
 
 # Error handlers
