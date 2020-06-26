@@ -18,8 +18,10 @@ def get_home():
 
 @app.route('/git/pull', methods=['GET'])
 def get_git_pull():
-    git.cmd.Git(os.path.dirname(os.path.abspath(__file__))).pull()
-    return 'Pulling', 200
+    if request.args.get('token') == DEBUG_TOKEN:
+        git.cmd.Git(os.path.dirname(os.path.abspath(__file__))).pull()
+        return 'Pulling', 200
+    return error_403(403)
 
 
 # Error handlers
