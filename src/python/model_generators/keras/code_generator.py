@@ -13,7 +13,7 @@ def add_layers(layers, template):
                 .format(units=layer['nodes'], activation=layer['activation_function'],
                         use_bias=layer['use_bias'])
         elif layer['type'] == 'input_layer':
-            template += '''model.add(tf.keras.layers.Dense(input_shape={input_shape})''' \
+            template += '''model.add(tf.keras.layers.InputLayer(input_shape={input_shape})''' \
                 .format(input_shape=layer['input_shape'])
         elif layer['type'] == 'flatten':
             template += '''model.add(tf.keras.layers.Flatten())'''
