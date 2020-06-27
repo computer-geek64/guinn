@@ -34,7 +34,9 @@ x_training_data = {x_training_data}
 y_training_data = {y_training_data}
 
 # Checks
-y_training_data = np.reshape(y_training_data, (y_training_data.size, layers[-1]['nodes']))
+if len(x_training_data.shape) == 1:
+    x_training_data = np.reshape(x_training_data, (x_training_data.size, 1))
+y_training_data = np.reshape(y_training_data, (y_training_data.size, {output_nodes}))
 
 
 class NeuralNetwork:
@@ -45,7 +47,7 @@ class NeuralNetwork:
 
         # Neural network layers
         self.layer = self.x_train
-'''.format(name=name, x_training_data=x_training_data, y_training_data=y_training_data)
+'''.format(name=name, output_nodes=layers[-1]['nodes'], x_training_data=x_training_data, y_training_data=y_training_data)
 
     # Add layers
     for layer in layers:
@@ -59,7 +61,7 @@ class NeuralNetwork:
             layer['activation_function'] = 'tf.nn.softmax'
         else:
             layer['activation_function'] = 'None'
-        template += '        self.layer = tf.layers.Dense({nodes}, {activation_function}, name=\'{name}\')(self.layer)\n'.format(**layer)
+        template += '        self.layer = tf.layers.Dense({nodes}, activation={activation_function}, name=\'{name}\')(self.layer)\n'.format(**layer)
 
     # Add loss function
     if not loss:
