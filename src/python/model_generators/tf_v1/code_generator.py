@@ -19,7 +19,6 @@ def generate_code(name, layers, x_training_data=None, y_training_data=None, loss
         x_training_data = 'None  # Add x training data'
         y_training_data = 'None  # Add y training data'
 
-
     # Create basic template structure with training data
     template = '''#!/usr/bin/python3
 # {name}.py
