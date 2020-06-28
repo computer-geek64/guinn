@@ -8,6 +8,46 @@ def to_str_list(data):
     return 'np.array(' + str(np.array(data).tolist()) + ')'
 
 
+def add_layer(layer_variable_name, **layer):
+    activation_functions = {
+        'relu': 'tf.nn.relu',
+        'leaky_relu': 'tf.nn.relu',
+        'sigmoid': 'tf.nn.sigmoid',
+        'tanh': 'tf.nn.tanh',
+        'softmax': 'tf.nn.softmax',
+        None: 'None'
+    }
+
+    layer['activation_function'] = activation_functions[layer.get('activation_function')]
+
+    types = {
+        'dense': '''        {layer_variable_name} = tf.layers.Dense({nodes}, activation={activation_function}, name='{name}')({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes'), activation_function=layer.get('activation_function'), name=layer.get('name')),
+        'embedding': '''        {layer_variable_name} =
+'''.format(layer_variable_name=layer_variable_name),
+        'flatten': '''        {layer_variable_name} = tf.layers.Flatten()({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name),
+        'dropout': '''        {layer_variable_name} = tf.layers.Dropout(rate={rate}, name='{name}')({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, rate=layer.get('rate'), name=layer.get('name')),
+        'batch_normalization': '''        {layer_variable_name} = tf.layers.BatchNormalization(axis={axis}, momentum={momentum}, epsilon={epsilon}, name={name})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, axis=layer.get('axis'), momentum=layer.get('momentum'), epsilon=layer.get('epsilon'), name=layer.get('name')),
+        'conv_2d': '''        {layer_variable_name} = tf.layers.Conv2D(filters={filters}, kernel_size={kernel_size}, strides={strides}, activation={activation_function}, name={name})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, filters=layer.get('filters'), kernel_size=layer.get('kernel_size'), strides=layer.get('strides'), activation_function=layer.get('activation_function'), name=layer.get('name')),
+        'max_pooling_2d': '''        {layer_variable_name} = tf.layers.MaxPooling2D(pool_size={pool_size}, strides={strides}, name={name})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, pool_size=layer.get('pool_size'), strides=layer.get('strides'), name=layer.get('name')),
+        'average_pooling_2d': '''        {layer_variable_name} = tf.layers.AveragePooling2D(pool_size={pool_size}, strides={strides}, name={name})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, pool_size=layer.get('pool_size'), strides=layer.get('strides'), name=layer.get('name')),
+        'rnn': '''        {layer_variable_name} = {layer_variable_name}
+'''.format(layer_variable_name=layer_variable_name),
+        'lstm': '''        {layer_variable_name} = {layer_variable_name}
+'''.format(layer_variable_name=layer_variable_name),
+        'gru': '''        {layer_variable_name} = {layer_variable_name}
+'''
+    }
+
+    return types[layer['type']]
+
+
 def generate_code(name, layers, x_training_data=None, y_training_data=None, loss=None, optimizer=None, learning_rate=None, epochs=None, batch_size=None):
     # Generate code
     name = name.lower().replace(' ', '_')
@@ -51,17 +91,7 @@ class NeuralNetwork:
 
     # Add layers
     for layer in layers:
-        if layer['activation_function'] == 'relu':
-            layer['activation_function'] = 'tf.nn.relu'
-        elif layer['activation_function'] == 'leaky_relu':
-            layer['activation_function'] = 'tf.nn.leaky_relu'
-        elif layer['activation_function'] == 'sigmoid':
-            layer['activation_function'] = 'tf.nn.sigmoid_cross_entropy_with_logits'
-        elif layer['activation_function'] == 'softmax':
-            layer['activation_function'] = 'tf.nn.softmax'
-        else:
-            layer['activation_function'] = 'None'
-        template += '        self.layer = tf.layers.Dense({nodes}, activation={activation_function}, name=\'{name}\')(self.layer)\n'.format(**layer)
+        template += add_layer('self.layer', **layer)
 
     # Add loss function
     if not loss:
@@ -155,5 +185,6 @@ print(nn.predict([[9]]))
 '''
     return template
 
+
 with open('neural_network.py', 'w') as file:
-    file.write(generate_code('Neural Network', [{'name': 'layer1', 'nodes': 10, 'activation_function': None}, {'name': 'layer2', 'nodes': 1, 'activation_function': None}], x_training_data=[[1], [2], [3], [4], [5], [6]], y_training_data=[[2], [3], [4], [5], [6], [7]]))
+    file.write(generate_code('Neural Network', [{'type': 'dense', 'name': 'layer1', 'nodes': 10, 'activation_function': None}, {'type': 'dense', 'name': 'layer2', 'nodes': 1, 'activation_function': None}], x_training_data=[[1], [2], [3], [4], [5], [6]], y_training_data=[[2], [3], [4], [5], [6], [7]]))
