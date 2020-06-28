@@ -62,9 +62,74 @@ def generate_code(name, layers, x_training_data=None, y_training_data=None, loss
     custom_layers = {
         'embedding': '''
 ''',
-        'rnn': '',
-        'lstm': '',
-        'gru': ''
+        'rnn': '''# RNN
+class RNN(keras_layers.SimpleRNN, base.Layer):
+    def __init__(self, units, activation='tanh', use_bias=True, kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal', bias_initializer='zeros',
+                 kernel_regularizer=None, recurrent_regularizer=None, bias_regularizer=None,
+                 activity_regularizer=None, kernel_constraint=None, recurrent_constraint=None,
+                 bias_constraint=None, dropout=0.0, recurrent_dropout=0.0,
+                 return_sequences=False, return_state=False, go_backwards=False, stateful=False,
+                 unroll=False, **kwargs):
+        super(RNN, self).__init__(units=units, activation=activation, use_bias=use_bias,
+                                  kernel_initializer=kernel_initializer, recurrent_initializer=recurrent_initializer,
+                                  bias_initializer=bias_initializer, kernel_regularizer=kernel_regularizer,
+                                  recurrent_regularizer=recurrent_regularizer, bias_regularizer=bias_regularizer,
+                                  activity_regularizer=activity_regularizer, kernel_constraint=kernel_constraint,
+                                  recurrent_constraint=recurrent_constraint, bias_constraint=bias_constraint,
+                                  dropout=dropout, recurrent_dropout=recurrent_dropout,
+                                  return_sequences=return_sequences, return_state=return_state,
+                                  go_backwards=go_backwards, stateful=stateful, unroll=unroll, **kwargs)
+
+
+''',
+        'lstm': '''# LSTM
+class LSTM(keras_layers.LSTM, base.Layer):
+    def __init__(self, units, activation='tanh', recurrent_activation='sigmoid', use_bias=True,
+                 kernel_initializer='glorot_uniform', recurrent_initializer='orthogonal',
+                 bias_initializer='zeros', unit_forget_bias=True, kernel_regularizer=None,
+                 recurrent_regularizer=None, bias_regularizer=None, activity_regularizer=None,
+                 kernel_constraint=None, recurrent_constraint=None, bias_constraint=None,
+                 dropout=0.0, recurrent_dropout=0.0, implementation=2, return_sequences=False,
+                 return_state=False, go_backwards=False, stateful=False, time_major=False,
+                 unroll=False, **kwargs)
+        super(LSTM, self).__init__(units=units, activation=activation, recurrent_activation=recurrent_activation,
+                                   use_bias=use_bias, kernel_initializer=kernel_initializer,
+                                   recurrent_initializer=recurrent_initializer, bias_initializer=bias_initializer,
+                                   unit_forget_bias=unit_forget_bias, kernel_regularizer=kernel_regularizer,
+                                   recurrent_regularizer=recurrent_regularizer, bias_regularizer=bias_regularizer,
+                                   activity_regularizer=activity_regularizer, kernel_constraint=kernel_constraint,
+                                   recurrent_constraint=recurrent_constraint, bias_constraint=bias_constraint,
+                                   dropout=dropout, recurrent_dropout=recurrent_dropout, implementation=implementation,
+                                   return_sequences=return_sequences, return_state=return_state,
+                                   go_backwards=go_backwards, stateful=stateful, time_major=time_major, unroll=unroll,
+                                   **kwargs)
+
+
+''',
+        'gru': '''# GRU
+class GRU(keras_layers.GRU, base.Layer):
+    def __init__(self, units, activation='tanh', recurrent_activation='sigmoid', use_bias=True,
+                 kernel_initializer='glorot_uniform', recurrent_initializer='orthogonal',
+                 bias_initializer='zeros', kernel_regularizer=None, recurrent_regularizer=None,
+                 bias_regularizer=None, activity_regularizer=None, kernel_constraint=None,
+                 recurrent_constraint=None, bias_constraint=None, dropout=0.0,
+                 recurrent_dropout=0.0, implementation=2, return_sequences=False,
+                 return_state=False, go_backwards=False, stateful=False, unroll=False,
+                 time_major=False, reset_after=True, **kwargs):
+        super(GRU, self).__init__(units=units, activation=activation, recurrent_activation=recurrent_activation,
+                                  use_bias=use_bias, kernel_initializer=kernel_initializer,
+                                  recurrent_initializer=recurrent_initializer, bias_initializer=bias_initializer,
+                                  kernel_regularizer=kernel_regularizer, recurrent_regularizer=recurrent_regularizer,
+                                  bias_regularizer=bias_regularizer, activity_regularizer=activity_regularizer,
+                                  kernel_constraint=kernel_constraint, recurrent_constraint=recurrent_constraint,
+                                  bias_constraint=bias_constraint, dropout=dropout, recurrent_dropout=recurrent_dropout,
+                                  implementation=implementation, return_sequences=return_sequences,
+                                  return_state=return_state, go_backwards=go_backwards, stateful=stateful,
+                                  unroll=unroll, time_major=time_major, reset_after=reset_after, **kwargs)
+
+
+'''
     }
 
     # Create initial template with imports
@@ -79,11 +144,13 @@ tf.disable_v2_behavior()
 
 '''.format(name=name, imports='''from tensorflow.python.keras import layers as keras_layers
 from tensorflow.python.layers import base
-from tensorflow.python.util.tf_export import tf_export
 ''' * int(bool(sum(1 for x in layers if x['type'] in custom_layers.keys()))))
 
     # Add custom layer classes
-    pass
+    template += '''# Custom layer classes
+''' * int(bool(sum(1 for x in layers if x['type'] in custom_layers.keys())))
+
+    template +=
 
     # Add training data
     template += '''# Training data
