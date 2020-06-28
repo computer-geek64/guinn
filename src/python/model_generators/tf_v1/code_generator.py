@@ -23,7 +23,7 @@ def add_layer(layer_variable_name, **layer):
     types = {
         'dense': '''        {layer_variable_name} = tf.layers.Dense({nodes}, activation={activation_function}, name='{name}')({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes'), activation_function=layer.get('activation_function'), name=layer.get('name')),
-        'embedding': '''        {layer_variable_name} = Embedding({input_dim}, {output_dim}){layer_variable_name})
+        'embedding': '''        {layer_variable_name} = Embedding({input_dim}, {output_dim})({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name, input_dim=layer.get('input_dim'), output_dim=layer.get('output_dim')),
         'flatten': '''        {layer_variable_name} = tf.layers.Flatten()({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name),
