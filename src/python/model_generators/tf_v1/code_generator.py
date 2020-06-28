@@ -59,17 +59,34 @@ def generate_code(name, layers, x_training_data=None, y_training_data=None, loss
         x_training_data = 'None  # Add x training data'
         y_training_data = 'None  # Add y training data'
 
-    # Create initial template class structure with training data
+    custom_layers = {
+        'embedding': '''
+''',
+        'rnn': '',
+        'lstm': '',
+        'gru': ''
+    }
+
+    # Create initial template with imports
     template = '''#!/usr/bin/python3
 # {name}.py
 
 import os
 import numpy as np
-import tensorflow.compat.v1 as tf
+{imports}import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
 
-# Training data
+'''.format(name=name, imports='''from tensorflow.python.keras import layers as keras_layers
+from tensorflow.python.layers import base
+from tensorflow.python.util.tf_export import tf_export
+''' * int(bool(sum(1 for x in layers if x['type'] in custom_layers.keys()))))
+
+    # Add custom layer classes
+    pass
+
+    # Add training data
+    template += '''# Training data
 x_training_data = {x_training_data}
 y_training_data = {y_training_data}
 
@@ -87,7 +104,7 @@ class NeuralNetwork:
 
         # Neural network layers
         self.layer = self.x_train
-'''.format(name=name, output_nodes=layers[-1]['nodes'], x_training_data=x_training_data, y_training_data=y_training_data)
+'''.format(custom_layers='', output_nodes=layers[-1]['nodes'], x_training_data=x_training_data, y_training_data=y_training_data)
 
     # Add layers
     for layer in layers:
