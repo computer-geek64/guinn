@@ -23,8 +23,8 @@ def add_layer(layer_variable_name, **layer):
     types = {
         'dense': '''        {layer_variable_name} = tf.layers.Dense({nodes}, activation={activation_function}, name='{name}')({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes'), activation_function=layer.get('activation_function'), name=layer.get('name')),
-        'embedding': '''        {layer_variable_name} =
-'''.format(layer_variable_name=layer_variable_name),
+        'embedding': '''        {layer_variable_name} = Embedding({input_dim}, {output_dim}){layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, input_dim=layer.get('input_dim'), output_dim=layer.get('output_dim')),
         'flatten': '''        {layer_variable_name} = tf.layers.Flatten()({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name),
         'dropout': '''        {layer_variable_name} = tf.layers.Dropout(rate={rate}, name='{name}')({layer_variable_name})
@@ -37,12 +37,12 @@ def add_layer(layer_variable_name, **layer):
 '''.format(layer_variable_name=layer_variable_name, pool_size=layer.get('pool_size'), strides=layer.get('strides'), name=layer.get('name')),
         'average_pooling_2d': '''        {layer_variable_name} = tf.layers.AveragePooling2D(pool_size={pool_size}, strides={strides}, name={name})({layer_variable_name})
 '''.format(layer_variable_name=layer_variable_name, pool_size=layer.get('pool_size'), strides=layer.get('strides'), name=layer.get('name')),
-        'rnn': '''        {layer_variable_name} = {layer_variable_name}
-'''.format(layer_variable_name=layer_variable_name),
-        'lstm': '''        {layer_variable_name} = {layer_variable_name}
-'''.format(layer_variable_name=layer_variable_name),
-        'gru': '''        {layer_variable_name} = {layer_variable_name}
-'''
+        'rnn': '''        {layer_variable_name} = RNN({nodes})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes')),
+        'lstm': '''        {layer_variable_name} = LSTM({nodes})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes')),
+        'gru': '''        {layer_variable_name} = GRU({nodes})({layer_variable_name})
+'''.format(layer_variable_name=layer_variable_name, nodes=layer.get('nodes'))
     }
 
     return types[layer['type']]
@@ -60,7 +60,19 @@ def generate_code(name, layers, x_training_data=None, y_training_data=None, loss
         y_training_data = 'None  # Add y training data'
 
     custom_layers = {
-        'embedding': '''
+        'embedding': '''# Embedding
+class Embedding(keras_layers.Embedding, base.Layer):
+    def __init__(self, input_dim, output_dim, embeddings_initializer='uniform',
+                 embeddings_regularizer=None, activity_regularizer=None,
+                 embeddings_constraint=None, mask_zero=False, input_length=None, **kwargs):
+        super(Embedding, self).__init__(input_dim=input_dim, output_dim=output_dim,
+                                        embeddings_initializer=embeddings_initializer,
+                                        embeddings_regularizer=embeddings_regularizer,
+                                        activity_regularizer=activity_regularizer,
+                                        embeddings_constraint=embeddings_constraint, mask_zero=mask_zero,
+                                        input_length=input_length, **kwargs)
+
+
 ''',
         'rnn': '''# RNN
 class RNN(keras_layers.SimpleRNN, base.Layer):
@@ -150,7 +162,7 @@ from tensorflow.python.layers import base
     template += '''# Custom layer classes
 ''' * int(bool(sum(1 for x in layers if x['type'] in custom_layers.keys())))
 
-    template +=
+    template += ''.join([custom_layers[x['type']] for x in layers if x['type'] in custom_layers.keys()])
 
     # Add training data
     template += '''# Training data
@@ -271,4 +283,4 @@ print(nn.predict([[9]]))
 
 
 with open('neural_network.py', 'w') as file:
-    file.write(generate_code('Neural Network', [{'type': 'dense', 'name': 'layer1', 'nodes': 10, 'activation_function': None}, {'type': 'dense', 'name': 'layer2', 'nodes': 1, 'activation_function': None}], x_training_data=[[1], [2], [3], [4], [5], [6]], y_training_data=[[2], [3], [4], [5], [6], [7]]))
+    file.write(generate_code('Neural Network', [{'type': 'rnn', 'name': 'layer1', 'nodes': 10, 'activation_function': None}, {'type': 'dense', 'name': 'layer2', 'nodes': 1, 'activation_function': None}], x_training_data=[[1], [2], [3], [4], [5], [6]], y_training_data=[[2], [3], [4], [5], [6], [7]]))
