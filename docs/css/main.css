@@ -1,0 +1,9 @@
+/* main.css */
+
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
