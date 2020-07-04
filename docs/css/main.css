@@ -1,9 +1,62 @@
 /* main.css */
 
+body {
+    margin: 0;
+}
+
 .sidenav {
     height: 100%;
-    width: 160px;
     position: fixed;
-    top: 0;
+    top: 60px;
+    border-top: 1px solid black;
+}
+
+.left-sidenav {
+    width: 160px;
     left: 0;
+    border-right: 1px solid black;
+}
+
+.right-sidenav {
+    width: 300px;
+    right: 0;
+    border-left: 1px solid black;
+}
+
+.left-sidenav button {
+    padding: 10px 0;
+    color: #081421;
+    font-size: 20px;
+    display: block;
+    border-width: 0;
+    width: 100%;
+}
+
+.right-sidenav h3 {
+    text-align: center;
+}
+
+#heading {
+    margin: 10px 0 0 0;
+    text-align: center;
+}
+
+#main {
+    margin: 11px 0 0 160px;
+    border-top: 1px solid black;
+    overflow: auto;
+    width: calc(100% - 160px - 300px);
+    height: calc(100vh - 61px);
+}
+
+div.input-row {
+    margin: 10px;
+}
+
+div.input-row > label {
+    line-height: 30px;
+}
+
+div.input-row > input, div.input-row > select {
+    float: right;
 }

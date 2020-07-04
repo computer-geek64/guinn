@@ -3,10 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Ashish D'Souza">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
     <title>GUINN</title>
 </head>
 <body>
-    <h1>Hello world!</h1>
-    <div class="sidenav"></div>
+    <h1 id="heading">Create Neural Network</h1>
+    <div class="sidenav left-sidenav">
+        <button onclick="add_dense_layer(document.querySelector('#layer-name').value, parseInt(document.querySelector('#nodes').value), document.querySelector('#activation-function').value);">Dense Layer</button>
+    </div>
+    <div class="sidenav right-sidenav">
+        <h3 style="margin: 10px 0; text-decoration: underline;">Layer Properties</h3>
+        <div class="input-row">
+            <label for="layer-name">Name:</label>
+            <input id="layer-name" type="text">
+        </div>
+        <div class="input-row">
+            <label for="nodes">Nodes:</label>
+            <input id="nodes" type="number" style="width: 32px;" required>
+        </div>
+        <div class="input-row">
+            <label for="activation-function">Activation:</label>
+            <select id="activation-function">
+                <option value="none">None</option>
+                <option value="relu">ReLU</option>
+                <option value="leaky_relu">Leaky ReLU</option>
+                <option value="sigmoid">Sigmoid</option>
+                <option value="tanh">Tanh</option>
+                <option value="softmax">Softmax</option>
+            </select>
+        </div>
+        <div class="input-row">
+            <label></label>
+        </div>
+    </div>
+    <div id="main">
+        <canvas id="canvas"></canvas>
+    </div>
+    <script src="js/render.js"></script>
 </body>
 </html>
