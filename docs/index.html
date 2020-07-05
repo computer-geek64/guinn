@@ -9,10 +9,17 @@
 <body>
     <h1 id="heading">Create Neural Network</h1>
     <div class="sidenav left-sidenav">
-        <button onclick="add_dense_layer(document.querySelector('#layer-name').value, parseInt(document.querySelector('#nodes').value), document.querySelector('#activation-function').value);">Dense Layer</button>
+        <h3 class="sidenav-heading">Update Layer</h3>
+        <select id="layers">
+            <option>Add layer</option>
+        </select>
+
+        <select id="layer-type">
+            <option>Dense</option>
+        </select>
     </div>
     <div class="sidenav right-sidenav">
-        <h3 style="margin: 10px 0; text-decoration: underline;">Layer Properties</h3>
+        <h3 class="sidenav-heading">Layer Properties</h3>
         <div class="input-row">
             <label for="layer-name">Name:</label>
             <input id="layer-name" type="text">

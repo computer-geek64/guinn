@@ -23,17 +23,17 @@ body {
     border-left: 1px solid black;
 }
 
-.left-sidenav button {
-    padding: 10px 0;
-    color: #081421;
-    font-size: 20px;
+.left-sidenav select {
+    margin: 10px;
+    padding: 5px 0;
     display: block;
     border-width: 0;
-    width: 100%;
+    width: calc(100% - 20px);
 }
 
-.right-sidenav h3 {
-    text-align: center;
+.left-sidenav label {
+    margin-bottom: 10px;
+    display: block;
 }
 
 #heading {
@@ -47,6 +47,12 @@ body {
     overflow: auto;
     width: calc(100% - 160px - 300px);
     height: calc(100vh - 61px);
+}
+
+.sidenav-heading {
+    margin: 10px 0;
+    text-decoration: underline;
+    text-align: center;
 }
 
 div.input-row {
