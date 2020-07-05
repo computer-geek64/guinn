@@ -10,12 +10,12 @@
     <h1 id="heading">Create Neural Network</h1>
     <div class="sidenav left-sidenav">
         <h3 class="sidenav-heading">Update Layer</h3>
-        <select id="layers">
-            <option>Add layer</option>
+        <select id="layers" onchange="updateLayerProperties(document.querySelector('#layers').value, document.querySelector('#layer-type').value)">
+            <option value="-1">Add layer</option>
+            <option>Layer 1</option>
         </select>
-
         <select id="layer-type">
-            <option>Dense</option>
+            <option value="dense">Dense</option>
         </select>
     </div>
     <div class="sidenav right-sidenav">
