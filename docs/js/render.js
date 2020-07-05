@@ -5,12 +5,12 @@ canvas.setAttribute('height', '' + (document.body.clientHeight - 61));
 let layers = [];
 let r = 15;
 
-function addDenseLayer(name, nodes, activation_function) {
+function addDenseLayer(name, nodes, activationFunction) {
     layers.push({
         type: 'dense',
         name: name,
         nodes: nodes,
-        activation_function: activation_function
+        activation_function: activationFunction
     });
 
     let canvas = document.querySelector('#canvas');
@@ -25,6 +25,22 @@ function addDenseLayer(name, nodes, activation_function) {
     }
 }
 
+function updateLayers() {
+    let layersSelect = document.querySelector('#layers');
+    layersSelect.innerHTML = '';
+
+    let option = document.createElement('option');
+    option.value = '-1';
+    option.innerText = 'Add Layer';
+    layersSelect.appendChild(option);
+    for(let i = 0; i < layers.length; i++) {
+        option = document.createElement('option');
+        option.value = '' + i;
+        option.innerText = layers[i]['name'];
+        layersSelect.appendChild(option);
+    }
+}
+
 function updateLayerProperties(index, type) {
     let name = document.querySelector('#layer-name');
     let nodes = document.querySelector('#nodes');
@@ -36,11 +52,21 @@ function updateLayerProperties(index, type) {
         activation.style['display'] = 'block';
     }
 
-    if(index === '-1') {
+    if(index === -1) {
         name.value = '';
         nodes.value = '';
-        activation.querySelector('option:first-child').selectedIndex = 0;
+        activation.selectedIndex = 0;
     }
+}
+
+function clearInputs() {
+    let name = document.querySelector('#layer-name');
+    let nodes = document.querySelector('#nodes');
+    let activation = document.querySelector('#activation-function');
+
+    name.value = '';
+    nodes.value = '';
+    activation.selectedIndex = 0;
 }
 
 

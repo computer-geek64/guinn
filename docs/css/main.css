@@ -66,3 +66,17 @@ div.input-row > label {
 div.input-row > input, div.input-row > select {
     float: right;
 }
+
+div.right-sidenav > div.footer {
+    position: fixed;
+    bottom: 0;
+    width: inherit;
+}
+
+div.right-sidenav > div.footer > button {
+    border: 0;
+    padding: 10px 20px;
+    background-color: limegreen;
+    margin: auto;
+    display: block;
+}
