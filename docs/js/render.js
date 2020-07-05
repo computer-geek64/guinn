@@ -16,12 +16,16 @@ function addDenseLayer(name, nodes, activationFunction) {
     let canvas = document.querySelector('#canvas');
     let context = canvas.getContext('2d');
 
-    let x = r * 1.2;
+    let x = r * 1.2 + (layers.length - 1) * 4 * r;
 
     for(let i = 0, y = r * 1.2; i < nodes; i++, y += r * 2.5) {
         context.beginPath();
         context.arc(x, y, r, 0, 2 * Math.PI);
         context.stroke();
+    }
+
+    if(layers.length > 1) {
+        //
     }
 }
 
