@@ -118,14 +118,3 @@ def generate_model(layers, loss=None, optimizer='rmsprop', x_train=None, y_train
         return errors
     compile_fit(model, optimizer, x_train, y_train, loss, batch_size, epochs)
     return model.save(model)
-
-# TEST
-'''layers = [{'type': 'dense',
-           'nodes': 10,
-           'activation_function': None,
-           'use_bias': True},
-          {'type': 'dense',
-           'nodes': 5,
-           'activation_function': 'relu',
-           'use_bias': True}]
-print(generate_template(layers=layers))'''

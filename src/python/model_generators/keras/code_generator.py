@@ -58,21 +58,21 @@ def add_layers(layers):
                     .format(units=layer['nodes'], activation=layer['activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
         elif layer['type'] == 'lstm':
-            if layer['activation_function'] is None and layer['recurrent_activation'] is not None:
+            if layer['activation_function'] is None and layer['recurrent_activation_function'] is not None:
                 return_string += '''model.add(tf.keras.layers.LSTM(units={units}, activation={activation}, 
                 recurrent_activation=\'{recurrent_activation}\', use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
                     .format(units=layer['nodes'], activation=layer['activation_function'],
                             recurrent_activation=layer['recurrent_activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
-            elif layer['activation_function'] is not None and layer['recurrent_activation'] is None:
+            elif layer['activation_function'] is not None and layer['recurrent_activation_function'] is None:
                 return_string += '''model.add(tf.keras.layers.LSTM(units={units}, activation=\'{activation}\', 
                 recurrent_activation={recurrent_activation}, use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
                     .format(units=layer['nodes'], activation=layer['activation_function'],
                             recurrent_activation=layer['recurrent_activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
-            elif layer['activation_function'] is None and layer['recurrent_activation'] is None:
+            elif layer['activation_function'] is None and layer['recurrent_activation_function'] is None:
                 return_string += '''model.add(tf.keras.layers.LSTM(units={units}, activation={activation}, 
                 recurrent_activation={recurrent_activation}, use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
@@ -87,21 +87,21 @@ def add_layers(layers):
                             recurrent_activation=layer['recurrent_activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
         elif layer['type'] == 'gru':
-            if layer['activation_function'] is None and layer['recurrent_activation'] is not None:
+            if layer['activation_function'] is None and layer['recurrent_activation_function'] is not None:
                 return_string += '''model.add(tf.keras.layers.GRU(units={units}, activation={activation}, 
                 recurrent_activation=\'{recurrent_activation}\', use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
                     .format(units=layer['nodes'], activation=layer['activation_function'],
                             recurrent_activation=layer['recurrent_activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
-            elif layer['activation_function'] is not None and layer['recurrent_activation'] is None:
+            elif layer['activation_function'] is not None and layer['recurrent_activation_function'] is None:
                 return_string += '''model.add(tf.keras.layers.GRU(units={units}, activation=\'{activation}\', 
                 recurrent_activation={recurrent_activation}, use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
                     .format(units=layer['nodes'], activation=layer['activation_function'],
                             recurrent_activation=layer['recurrent_activation_function'], use_bias=layer['use_bias'],
                             dropout=layer['dropout'], recurrent_dropout=layer['recurrent_dropout'])
-            elif layer['activation_function'] is None and layer['recurrent_activation'] is None:
+            elif layer['activation_function'] is None and layer['recurrent_activation_function'] is None:
                 return_string += '''model.add(tf.keras.layers.GRU(units={units}, activation={activation}, 
                 recurrent_activation={recurrent_activation}, use_bias={use_bias}, dropout={dropout}, 
                 recurrent_dropout={recurrent_dropout})\n''' \
@@ -145,13 +145,13 @@ def add_compile_fit(optimizer, x_train, y_train, loss, batch_size, epochs):
     return return_string
 
 
-def generate_template(layers, loss='mse', optimizer='sgd', x_train=None, y_train=None, batch_size=32, epochs=10):
+def generate_template(layers, loss=None, optimizer='rmsprop', x_train=None, y_train=None, batch_size=32, epochs=10):
     template = '''import tensorflow as tf\n'''
     template += add_layers(layers)
     template += add_compile_fit(optimizer, x_train, y_train, loss, batch_size, epochs)
     return template
 
-# TEST 
+# TEST
 '''layers = [{'type': 'dense',
            'nodes': 10,
            'activation_function': None,
